@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/planning")
@@ -19,5 +21,19 @@ public class PlanningController {
     @PostMapping
     public ResponseEntity<Planning> saveEmployee(@RequestBody Planning planning){
         return new ResponseEntity<>(planningService.createPlanning(planning), HttpStatus.CREATED);
+    }
+    @GetMapping
+    public List<Planning> getAllPlannings() {
+        return planningService.getAllPlannings();
+    }
+    @PutMapping("{id}")
+    public ResponseEntity<Planning> updatePlanning(@PathVariable("id") long id, @RequestBody Planning planning) {
+        return new ResponseEntity<>(planningService.updatePlanning(planning, id), HttpStatus.OK);
+    }
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deletePlanning(@PathVariable("id") long id) {
+        planningService.deletePlanning(id);
+
+        return new ResponseEntity<>("Employee has been deleted successfully!", HttpStatus.OK);
     }
 }

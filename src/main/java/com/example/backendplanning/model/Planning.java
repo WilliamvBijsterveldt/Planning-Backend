@@ -21,8 +21,8 @@ public class Planning {
     private String description;
 
     @Column(name = "Start_Date")
-    private Date endDate;
+    private Date startDate;
 
     @Column(name = "End_Date")
-    private Date startDate;
+    private Date endDate;
 }
