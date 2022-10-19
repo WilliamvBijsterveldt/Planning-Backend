@@ -22,14 +22,22 @@ public class PlanningController {
     public ResponseEntity<Planning> saveEmployee(@RequestBody Planning planning){
         return new ResponseEntity<>(planningService.createPlanning(planning), HttpStatus.CREATED);
     }
+
     @GetMapping
     public List<Planning> getAllPlannings() {
         return planningService.getAllPlannings();
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Planning> getPlanningById(@PathVariable("id") long id) {
+        return new ResponseEntity<Planning>(planningService.getPlanningById(id), HttpStatus.OK);
+    }
+
     @PutMapping("{id}")
     public ResponseEntity<Planning> updatePlanning(@PathVariable("id") long id, @RequestBody Planning planning) {
         return new ResponseEntity<>(planningService.updatePlanning(planning, id), HttpStatus.OK);
     }
+
     @DeleteMapping("{id}")
     public ResponseEntity<String> deletePlanning(@PathVariable("id") long id) {
         planningService.deletePlanning(id);
