@@ -32,9 +32,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private final RsaKeyProperties rsaKeys;
+    private final JpaUserDetailsService jpaUserDetailsService;
 
-    public SecurityConfig(RsaKeyProperties rsaKeys) {
+    public SecurityConfig(RsaKeyProperties rsaKeys, JpaUserDetailsService jpaUserDetailsService) {
         this.rsaKeys = rsaKeys;
+        this.jpaUserDetailsService = jpaUserDetailsService;
     }
 
 //    @Bean
@@ -52,19 +54,20 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> auth
+                        .mvcMatchers("planning").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-//                .headers(headers -> headers.frameOptions().sameOrigin())
-//                .userDetailsService(jpaUserDetailsService)
+                .headers(headers -> headers.frameOptions().sameOrigin())
+                .userDetailsService(jpaUserDetailsService)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(withDefaults())
                 .build();
     }
 
-//    @Bean
-//    PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     JwtDecoder jwtDecoder() {
