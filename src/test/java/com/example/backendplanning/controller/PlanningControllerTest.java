@@ -34,14 +34,14 @@ class PlanningControllerTest {
     void rootWhenAuthenticatedThenSaysHelloUser() throws Exception {
         MvcResult result = this.mvc.perform(post("/token")
                         .with(httpBasic("william", "password")))
-                .andExpect(status().isOk())
-                .andReturn();
+                        .andExpect(status().isOk())
+                        .andReturn();
 
         String token = result.getResponse().getContentAsString();
 
         this.mvc.perform(get("/")
                         .header("Authorization", "Bearer " + token))
-                .andExpect((ResultMatcher) content().string("Hello, william"));
+                        .andExpect((ResultMatcher) content().string("Hello, william"));
     }
 
     @Test
