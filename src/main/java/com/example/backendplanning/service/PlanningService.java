@@ -10,6 +10,4 @@ public interface PlanningService {
     Planning getPlanningById(long id);
     Planning updatePlanning(Planning planning, long id);
     void deletePlanning(long id);
-
-    //test
 }
