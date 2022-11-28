@@ -33,7 +33,7 @@ jobs:
     - name: Build & push docker image
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
-        image: williamvbijsterveldt/springboot-image-planning-backend
+        image: $DOCKER_IMAGE
         tags: latest
         registry: docker.io
         dockerfile: Dockerfile
