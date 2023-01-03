@@ -1,6 +1,8 @@
 package com.example.backendplanning.controller;
 
+import com.example.backendplanning.model.CreatePlanning;
 import com.example.backendplanning.model.Planning;
+import com.example.backendplanning.model.Weather;
 import com.example.backendplanning.service.PlanningService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +21,8 @@ public class PlanningController {
     }
 
     @PostMapping
-    public ResponseEntity<Planning> saveEmployee(@RequestBody Planning planning){
-        return new ResponseEntity<>(planningService.createPlanning(planning), HttpStatus.CREATED);
+    public ResponseEntity<Planning> saveEmployee(@RequestBody CreatePlanning createPlanning){
+        return new ResponseEntity<>(planningService.createPlanning(createPlanning), HttpStatus.CREATED);
     }
 
     @GetMapping

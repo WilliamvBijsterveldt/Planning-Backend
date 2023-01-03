@@ -25,4 +25,8 @@ public class Planning {
 
     @Column(name = "End_Date")
     private Date endDate;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "weather_id", referencedColumnName = "id")
+    private Weather weather;
 }
