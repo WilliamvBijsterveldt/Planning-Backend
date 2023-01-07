@@ -6,8 +6,10 @@ import com.example.backendplanning.model.CreatePlanning;
 import com.example.backendplanning.model.Planning;
 import com.example.backendplanning.model.Weather;
 import com.example.backendplanning.repository.PlanningRepository;
+import com.example.backendplanning.repository.WeatherRepository;
 import com.example.backendplanning.service.PlanningService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -17,16 +19,20 @@ public class PlanningServiceImpl implements PlanningService {
 
     private RestTemplate restTemplate = new RestTemplate();
     private PlanningRepository planningRepository;
+    private WeatherRepository weatherRepository;
 
-    public PlanningServiceImpl(PlanningRepository planningRepository) {
+    public PlanningServiceImpl(PlanningRepository planningRepository, WeatherRepository weatherRepository) {
         this.planningRepository = planningRepository;
+        this.weatherRepository = weatherRepository;
     }
 
     @Override
     public Planning createPlanning(CreatePlanning createPlanning) {
         var weather = getWeather(createPlanning.getCoordinate());
 
-        createPlanning.getPlanning().setWeather(weather);
+        if(weather != null) {
+            createPlanning.getPlanning().setWeather(weather);
+        }
 
         return planningRepository.save(createPlanning.getPlanning());
     }
@@ -63,8 +69,26 @@ public class PlanningServiceImpl implements PlanningService {
         planningRepository.deleteById(id);
     }
 
+    @Override
+    public Weather getWeatherByPlanning(long planningID) {
+        var weatherId = getPlanningById(planningID);
+
+        return weatherRepository.findById(weatherId.getId()).orElseThrow(() -> new ResourceNotFoundException("Planning", "Id", weatherId));
+    }
+
     private Weather getWeather(Coordinate coordinate) {
-        String url = String.format("http://localhost:9000/weatherTest?lat=%s&lon=%s",coordinate.getLat(), coordinate.getLon());
-        return restTemplate.getForObject(url, Weather.class);
+
+        if(coordinate == null) return null;
+
+        try {
+            String url = String.format("http://localhost:9000/weatherTest?lat=%s&lon=%s",coordinate.getLat(), coordinate.getLon());
+            return restTemplate.getForObject(url, Weather.class);
+        }
+        catch (RestClientException e)
+        {
+            System.out.println(e);
+        }
+
+        return null;
     }
 }

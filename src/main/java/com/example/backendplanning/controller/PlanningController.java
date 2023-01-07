@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -21,7 +22,7 @@ public class PlanningController {
     }
 
     @PostMapping
-    public ResponseEntity<Planning> saveEmployee(@RequestBody CreatePlanning createPlanning){
+    public ResponseEntity<Planning> saveEmployee(@Valid @RequestBody CreatePlanning createPlanning){
         return new ResponseEntity<>(planningService.createPlanning(createPlanning), HttpStatus.CREATED);
     }
 
